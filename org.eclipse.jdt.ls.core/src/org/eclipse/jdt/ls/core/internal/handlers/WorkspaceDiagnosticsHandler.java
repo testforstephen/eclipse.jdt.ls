@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -410,6 +411,17 @@ public final class WorkspaceDiagnosticsHandler implements IResourceChangeListene
 			d.setTags(DiagnosticsHandler.getDiagnosticTag(problemId));
 		}
 		d.setRange(range);
+		try {
+			if (marker.getAttribute("javacCode") != null) {
+				String javacCode = (String) marker.getAttribute("javacCode");
+				Map<String, Object> data = new HashMap<>();
+				data.put("ecjProblemId", String.valueOf(problemId));
+				d.setCode(javacCode);
+				d.setData(data);
+			}
+		} catch (CoreException e) {
+			// do nothing
+		}
 		return d;
 	}
 
@@ -458,6 +470,17 @@ public final class WorkspaceDiagnosticsHandler implements IResourceChangeListene
 		d.setRange(convertRange(document, marker));
 		if (isDiagnosticTagSupported) {
 			d.setTags(DiagnosticsHandler.getDiagnosticTag(problemId));
+		}
+		try {
+			if (marker.getAttribute("javacCode") != null) {
+				String javacCode = (String) marker.getAttribute("javacCode");
+				Map<String, Object> data = new HashMap<>();
+				data.put("ecjProblemId", String.valueOf(problemId));
+				d.setCode(javacCode);
+				d.setData(data);
+			}
+		} catch (CoreException e) {
+			// do nothing
 		}
 		return d;
 	}
